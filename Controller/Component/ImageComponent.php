@@ -38,7 +38,7 @@ class ImageComponent extends Component {
   	}
   }	
 
-  /* Save the Image */
+  /* 保存图像 */
   public function save($file, $quality = 100) {
       $info = pathinfo($file);
       $extension = strtolower($info['extension']);
@@ -52,29 +52,29 @@ class ImageComponent extends Component {
       }
 	    imagedestroy($this->image);
   }
-   
+
+  /* 按比例缩放图像并且对图像进行剪裁 */
   public function crop($width, $heigth) {
     $source_aspect_ratio = $this->info['width'] / $this->info['height'];
     $desired_aspect_ratio = $width / $heigth;
 
     if ($source_aspect_ratio > $desired_aspect_ratio) {
         /*
-         * Triggered when source image is wider
+         * 原图像比例较宽时比例缩放
          */
         $temp_height = $heigth;
         $temp_width = ( int ) ($heigth * $source_aspect_ratio);
     } else {
         /*
-         * Triggered otherwise (i.e. source image is similar or taller)
+         * 原图像较小或者较高长时图像缩放比例
          */
         $temp_width = $width;
         $temp_height = ( int ) ($width / $source_aspect_ratio);
     }
 
     /*
-     * Resize the image into a temporary GD image
+     * 将原图像缩放到一定比例
      */
-
     $temp_gdim = imagecreatetruecolor($temp_width, $temp_height);
     imagecopyresampled(
         $temp_gdim,
@@ -93,7 +93,7 @@ class ImageComponent extends Component {
     
     imagecopy($this->image, $image_old, 0, 0, $top_x, $top_y, $this->info['width'], $this->info['height']);
     imagedestroy($image_old);
-    
+
     $this->info['width'] = $width;
     $this->info['height'] = $heigth;
   }
